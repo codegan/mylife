@@ -1,6 +1,8 @@
 package ru.codegan.mylife.model;
 
-public class Books {
+import java.io.Serializable;
+
+public class Books implements Serializable{
 	private int id;
 	private String name, author;
 	private int year;

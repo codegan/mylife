@@ -10,7 +10,7 @@ public interface BooksService {
 
 	public void addBook(Books books) throws SQLException;
 	public void editBook(Books books) throws SQLException;
-	public List<Books> getListBooks() throws SQLException;
+	public List<Books> getListBooks();
 	public Books getBookById(int id) throws SQLException;
 	public void deleteBook(int id) throws SQLException;
 	

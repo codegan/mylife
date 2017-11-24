@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -19,16 +21,17 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import ru.codegan.mylife.model.Books;
-
-@Repository
+import javax.annotation.*;
+@Repository("booksDaoImpl")
 public class BooksDaoImpl implements BooksDao{
-	
+	private static final Log LOG = LogFactory.getLog(BooksDaoImpl.class);
 	private DataSource dataSource;
 	private Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
 	
 	@Autowired
+	@Resource(name="dataSource")
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -56,11 +59,12 @@ public class BooksDaoImpl implements BooksDao{
 		conn.close();
 	}
 
-	public List<Books> getListBooks() throws SQLException {
+	public List<Books> getListBooks()  {
+		List<Books> list = new ArrayList();
+		try {
 		conn = dataSource.getConnection();
 		stmt = conn.createStatement();
 		rs = stmt.executeQuery("select * from main.books");
-		List<Books> list = new ArrayList();
 				while (rs.next())
 				{
 					Books books = new Books();
@@ -72,6 +76,16 @@ public class BooksDaoImpl implements BooksDao{
 				}
 				rs.close();
 				stmt.close();
+		}catch (SQLException exp) {
+			exp.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return list;
 	}
 	

@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd
-    http://www.springframework.org/schema/data/jpa
-    http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd"
+	>
     
-	<context:annotation-config/>
 	<context:component-scan base-package="ru.codegan.mylife.controllers" />
 	<context:component-scan base-package="ru.codegan.mylife.dao" />
 	<context:component-scan base-package="ru.codegan.mylife.services" />
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	<tx:annotation-driven/>
 	
 	<!-- JSON -->
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -24,13 +30,13 @@
 	</bean>
 	<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
 	
-	<!-- Postgres -->
+	<!-- DataSource -->
 	<bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="jdbc:postgresql://localhost:5432/mylife_test" />
-        <property name="username" value="postgres" />
-        <property name="password" value="password" />
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
         <!--<property name="socketTimeout" value="10"/>-->
 
         <property name="connectionProperties">
@@ -39,4 +45,23 @@
             </props>
         </property>
    </bean>
+   <!-- Hibernate config -->
+   <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="packagesToScan" value="ru.codegan.mylife.model"/>
+		<property name="hibernateProperties" ref="hibernateProperties"/>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<util:properties id="hibernateProperties">
+		<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+		<prop key="hibernate.max_fetch_depth">З</prop>
+		<prop key="hibernate.jdЬc.fetch_size">50</prop>
+		<prop key="hibernate.jdЬc.batch_size">lO</prop>
+		<prop key="hibernate.show_sql">true</prop>
+	</util:properties>
+   
+   
 </beans>

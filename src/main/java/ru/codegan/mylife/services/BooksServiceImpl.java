@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.model.Books;
-
+import javax.annotation.*;
 @Service
 public class BooksServiceImpl implements BooksService{
 
 	BooksDao booksDao;
 	
-	@Autowired
+	@Resource(name="booksDaoImpl")
 	public void setBooksDao(BooksDao booksDao) {
 		this.booksDao = booksDao;
 	}
@@ -27,7 +27,7 @@ public class BooksServiceImpl implements BooksService{
 		this.booksDao.editBook(books);
 	}
 
-	public List<Books> getListBooks() throws SQLException {
+	public List<Books> getListBooks() {
 		return this.booksDao.getListBooks();
 	}
 

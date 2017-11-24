@@ -31,7 +31,7 @@ public class BooksRestController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/all")
-	public @ResponseBody List<Books> getBooks() throws SQLException {
+	public @ResponseBody List<Books> getBooks() {
 		return this.booksService.getListBooks();
 	}
 	
