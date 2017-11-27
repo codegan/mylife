@@ -18,7 +18,7 @@ import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.dao.BooksDaoImpl;
 import ru.codegan.mylife.model.Books;
 import ru.codegan.mylife.services.BooksService;
-
+import org.apache.commons.dbcp.BasicDataSource;
 @RestController
 @RequestMapping("/api")
 public class BooksRestController {
@@ -32,7 +32,7 @@ public class BooksRestController {
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/all")
 	public @ResponseBody List<Books> getBooks() {
-		return this.booksService.getListBooks();
+		return this.booksService.findAll();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/{id}")
@@ -63,6 +63,15 @@ public class BooksRestController {
 		books.setName(name);
 		books.setYear(year);
 		books.setAuthor(author);
+		this.booksService.editBook(books);
+		return this.booksService.getListBooks();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/book/edit/{id}/{name}")
+	public List<Books> updateNameBook(@PathVariable int id, @PathVariable String name) throws SQLException{
+		Books books = new Books();
+		books.setId(id);
+		books.setName(name);
 		this.booksService.editBook(books);
 		return this.booksService.getListBooks();
 	}

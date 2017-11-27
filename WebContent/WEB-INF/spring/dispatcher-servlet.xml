@@ -48,20 +48,20 @@
    <!-- Hibernate config -->
    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
-		<property name="packagesToScan" value="ru.codegan.mylife.model"/>
-		<property name="hibernateProperties" ref="hibernateProperties"/>
+		<property name="annotatedClasses">
+			<list>
+				<value>ru.codegan.mylife.model.Books</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
 	</bean>
-	
 	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
-	<util:properties id="hibernateProperties">
-		<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-		<prop key="hibernate.max_fetch_depth">З</prop>
-		<prop key="hibernate.jdЬc.fetch_size">50</prop>
-		<prop key="hibernate.jdЬc.batch_size">lO</prop>
-		<prop key="hibernate.show_sql">true</prop>
-	</util:properties>
-   
-   
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>

@@ -6,6 +6,7 @@ import java.util.List;
 import ru.codegan.mylife.model.Books;
 
 public interface BooksDao {
+	public List<Books> findAll();
 	public void addBook(Books books) throws SQLException;
 	public void editBook(Books books) throws SQLException;
 	public List<Books> getListBooks();

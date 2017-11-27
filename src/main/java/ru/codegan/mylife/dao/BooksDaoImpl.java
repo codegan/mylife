@@ -14,9 +14,11 @@ import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -29,11 +31,19 @@ public class BooksDaoImpl implements BooksDao{
 	private Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
+	private SessionFactory sessionFactory;
 	
-	@Autowired
 	@Resource(name="dataSource")
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+	@Resource(name="sessionFactory")
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	@Transactional(readOnly=true)
+	public List<Books> findAll(){
+		return sessionFactory.getCurrentSession().createQuery("from Books b").list();
 	}
 	
 	public void addBook(Books books) throws SQLException {
@@ -49,11 +59,18 @@ public class BooksDaoImpl implements BooksDao{
 
 	public void editBook(Books books) throws SQLException {
 		conn = dataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement("UPDATE main.books set name = ?, year = ?, author = ? where id = ?");
-		ps.setString(1, books.getName());
-		ps.setInt(2, books.getYear());
-		ps.setString(3, books.getAuthor());
-		ps.setInt(4, books.getId());
+		PreparedStatement ps ;
+		if(books.getAuthor() == null || books.getYear() == 0) {
+			ps = conn.prepareStatement("UPDATE main.books set name = ? where id = ?");
+			ps.setString(1, books.getName());
+			ps.setInt(2, books.getId());
+		}else {
+			ps = conn.prepareStatement("UPDATE main.books set name = ?, year = ?, author = ? where id = ?");
+			ps.setString(1, books.getName());
+			ps.setInt(2, books.getYear());
+			ps.setString(3, books.getAuthor());
+			ps.setInt(4, books.getId());
+		}
 		ps.executeUpdate();
 		ps.close();
 		conn.close();

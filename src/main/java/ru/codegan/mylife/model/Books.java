@@ -2,9 +2,26 @@ package ru.codegan.mylife.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name="main.books")
 public class Books implements Serializable{
+	@Id
+	@GeneratedValue 
+	@Column(name="id")
 	private int id;
-	private String name, author;
+
+	@Column(name="name")
+	private String name;
+
+	@Column(name="author")
+	private String author;
+	
+	@Column(name="year")
 	private int year;
 	
 	public Books() {

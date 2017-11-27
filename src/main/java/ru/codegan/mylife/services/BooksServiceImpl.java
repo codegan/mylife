@@ -38,4 +38,9 @@ public class BooksServiceImpl implements BooksService{
 	public void deleteBook(int id) throws SQLException {
 		this.booksDao.deleteBook(id);
 	}
+
+	public List<Books> findAll() {
+		// TODO Auto-generated method stub
+		return this.booksDao.findAll();
+	}
 }
