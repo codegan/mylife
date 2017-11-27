@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,26 +25,30 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import ru.codegan.mylife.model.Books;
 import javax.annotation.*;
-@Repository("booksDaoImpl")
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+@Repository
+@Transactional
 public class BooksDaoImpl implements BooksDao{
 	private static final Log LOG = LogFactory.getLog(BooksDaoImpl.class);
 	private DataSource dataSource;
 	private Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
-	private SessionFactory sessionFactory;
+	
+	@PersistenceContext
+	private EntityManager em;
 	
 	@Resource(name="dataSource")
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	@Resource(name="sessionFactory")
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
-	@Transactional(readOnly=true)
+	
+	
 	public List<Books> findAll(){
-		return sessionFactory.getCurrentSession().createQuery("from Books b").list();
+		  List<Books> books = em.createNamedQuery("Books.findAll").getResultList();
+		return books;
 	}
 	
 	public void addBook(Books books) throws SQLException {

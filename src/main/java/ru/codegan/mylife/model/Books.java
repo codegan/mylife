@@ -6,9 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
 @Entity
 @Table(name="main.books")
+@NamedQuery(name="Books.findAll", query="SELECT b FROM Books b") 
 public class Books implements Serializable{
 	@Id
 	@GeneratedValue 
