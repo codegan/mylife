@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.dao.BooksDaoImpl;
 import ru.codegan.mylife.model.Books;
+import ru.codegan.mylife.model.BooksReadEnd;
+import ru.codegan.mylife.model.BooksUsed;
 import ru.codegan.mylife.services.BooksService;
 import org.apache.commons.dbcp.BasicDataSource;
 @RestController
@@ -31,8 +33,9 @@ public class BooksRestController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/all")
-	public @ResponseBody List<Books> getBooks() {
+	public @ResponseBody List<BooksUsed> getBooks() {
 		return this.booksService.findAll();
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/{id}")
@@ -41,7 +44,7 @@ public class BooksRestController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/book/add/{name}/{year}/{author}")
-	public List<Books> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
+	public List<BooksUsed> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
 		Books books = new Books();
 		books.setName(name);
 		books.setYear(year);

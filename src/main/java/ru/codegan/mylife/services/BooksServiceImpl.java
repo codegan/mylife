@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.model.Books;
+import ru.codegan.mylife.model.BooksReadEnd;
+import ru.codegan.mylife.model.BooksUsed;
+
 import javax.annotation.*;
 @Service
 public class BooksServiceImpl implements BooksService{
@@ -39,8 +42,8 @@ public class BooksServiceImpl implements BooksService{
 		this.booksDao.deleteBook(id);
 	}
 
-	public List<Books> findAll() {
+	public List<BooksUsed> findAll() {
 		// TODO Auto-generated method stub
-		return this.booksDao.findAll();
+		return this.booksDao.findAllBooksUsed();
 	}
 }

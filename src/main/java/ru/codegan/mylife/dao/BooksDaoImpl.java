@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import ru.codegan.mylife.model.Books;
+import ru.codegan.mylife.model.BooksUsed;
+
 import javax.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -46,8 +48,13 @@ public class BooksDaoImpl implements BooksDao{
 	}
 	
 	
-	public List<Books> findAll(){
+	public List<Books> findAllBooks(){
 		  List<Books> books = em.createNamedQuery("Books.findAll").getResultList();
+		return books;
+	}
+	
+	public List<BooksUsed> findAllBooksUsed(){
+		  List<BooksUsed> books = em.createQuery("SELECT b FROM BooksUsed b").getResultList();
 		return books;
 	}
 	

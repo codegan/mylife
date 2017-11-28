@@ -1,18 +1,27 @@
 package ru.codegan.mylife.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="main.books")
-@NamedQuery(name="Books.findAll", query="SELECT b FROM Books b") 
+@NamedQuery(name="Books.findAll", query="SELECT DISTINCT b FROM Books b left join fetch b.booksReadEnd br") 
 public class Books implements Serializable{
 	@Id
 	@GeneratedValue 
@@ -27,6 +36,10 @@ public class Books implements Serializable{
 	
 	@Column(name="year")
 	private int year;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "books", cascade=CascadeType.ALL)
+	List<BooksReadEnd> booksReadEnd;
 	
 	public Books() {
 	}
@@ -61,6 +74,15 @@ public class Books implements Serializable{
 	}
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	
+	
+	public List<BooksReadEnd> getBooksReadEnd() {
+		return booksReadEnd;
+	}
+
+	public void setBooksReadEnd(List<BooksReadEnd> booksReadEnd) {
+		this.booksReadEnd = booksReadEnd;
 	}
 
 	@Override
