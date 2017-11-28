@@ -49,13 +49,18 @@ public class BooksDaoImpl implements BooksDao{
 	
 	
 	public List<Books> findAllBooks(){
-		  List<Books> books = em.createNamedQuery("Books.findAll").getResultList();
+		  List<Books> books = em.createQuery("SELECT b FROM Books b").getResultList();
 		return books;
 	}
 	
 	public List<BooksUsed> findAllBooksUsed(){
-		  List<BooksUsed> books = em.createQuery("SELECT b FROM BooksUsed b").getResultList();
-		return books;
+		  List<BooksUsed> books_used = em.createQuery("SELECT b FROM BooksUsed b").getResultList();
+		return books_used;
+	}
+	
+	public List<BooksUsed> findAllStatusBooks(int status_id) {
+		TypedQuery<BooksUsed> books_used = (TypedQuery<BooksUsed>) em.createQuery("SELECT b FROM BooksUsed b left join fetch b.usedStatus bs WHERE bs.id =:status_id");
+		return books_used.setParameter("status_id", status_id).getResultList();
 	}
 	
 	public void addBook(Books books) throws SQLException {
@@ -142,5 +147,4 @@ public class BooksDaoImpl implements BooksDao{
 		ps.close();
 		conn.close();
 	}
-
 }

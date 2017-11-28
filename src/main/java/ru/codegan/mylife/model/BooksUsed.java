@@ -6,18 +6,21 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="main.books_used")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class BooksUsed {
 	
 	@Id
@@ -28,13 +31,15 @@ public class BooksUsed {
 	private Date date_start;
 	private Date date_end;
 	
-	@JsonIgnore(true)
-	@OneToOne(fetch=FetchType.LAZY)
+	@JsonProperty
+	@OneToOne
+	@JoinColumn(name="books_id")
 	private Books books;
 	
-	@JsonIgnore(true)
-	@OneToOne(fetch=FetchType.LAZY)
-	private BooksUsedStatus books_used_status;
+	@JsonProperty
+	@ManyToOne
+    @JoinColumn(name="books_used_status_id")
+	private BooksUsedStatus usedStatus;
 	
 	
 	public int getId() {
@@ -68,10 +73,10 @@ public class BooksUsed {
 		this.books =books;
 	}
 	public BooksUsedStatus getUsedStatus() {
-		return books_used_status;
+		return usedStatus;
 	}
-	public void setUsedStatus(BooksUsedStatus books_used_status) {
-		this.books_used_status = books_used_status;
+	public void setUsedStatus(BooksUsedStatus usedStatus) {
+		this.usedStatus = usedStatus;
 	}
 	
 	

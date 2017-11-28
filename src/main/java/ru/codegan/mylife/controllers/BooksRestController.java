@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.dao.BooksDaoImpl;
 import ru.codegan.mylife.model.Books;
-import ru.codegan.mylife.model.BooksReadEnd;
 import ru.codegan.mylife.model.BooksUsed;
 import ru.codegan.mylife.services.BooksService;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -33,9 +32,20 @@ public class BooksRestController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/all")
-	public @ResponseBody List<BooksUsed> getBooks() {
-		return this.booksService.findAll();
+	public @ResponseBody List<Books> getBooks() {
+		return this.booksService.findAllBooks();
 		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/book_used/all")
+	public @ResponseBody List<BooksUsed> getUsedBooks() {
+		return this.booksService.findAllBooksUsed();
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/book_used_status/{id}")
+	public @ResponseBody List<BooksUsed> getUsedStatusBooks(@PathVariable("id") int used_status_id) throws SQLException {
+		return this.booksService.findAllStatusBooks(used_status_id);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book/{id}")
@@ -43,8 +53,10 @@ public class BooksRestController {
 		return this.booksService.getBookById(id);
 	}
 	
+	
+	
 	@RequestMapping(method = RequestMethod.POST, value="/book/add/{name}/{year}/{author}")
-	public List<BooksUsed> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
+	public List<Books> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
 		Books books = new Books();
 		books.setName(name);
 		books.setYear(year);

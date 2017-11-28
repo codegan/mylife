@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.model.Books;
-import ru.codegan.mylife.model.BooksReadEnd;
 import ru.codegan.mylife.model.BooksUsed;
 
 import javax.annotation.*;
@@ -20,6 +19,21 @@ public class BooksServiceImpl implements BooksService{
 	@Resource(name="booksDaoImpl")
 	public void setBooksDao(BooksDao booksDao) {
 		this.booksDao = booksDao;
+	}
+	
+	public List<Books> findAllBooks() {
+		// TODO Auto-generated method stub
+		return this.booksDao.findAllBooks();
+	}
+
+	public List<BooksUsed> findAllBooksUsed() {
+		// TODO Auto-generated method stub
+		return this.booksDao.findAllBooksUsed();
+	}
+
+	public List<BooksUsed> findAllStatusBooks(int status_id) {
+		// TODO Auto-generated method stub
+		return this.booksDao.findAllStatusBooks(status_id);
 	}
 	
 	public void addBook(Books books) throws SQLException {

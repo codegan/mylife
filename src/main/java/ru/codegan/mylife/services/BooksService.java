@@ -5,11 +5,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ru.codegan.mylife.model.Books;
-import ru.codegan.mylife.model.BooksReadEnd;
 import ru.codegan.mylife.model.BooksUsed;
 
 public interface BooksService {
-	public List<BooksUsed> findAll();
+	public List<Books> findAllBooks();
+	public List<BooksUsed> findAllBooksUsed();
+	public List<BooksUsed> findAllStatusBooks(int status_id);
 	public void addBook(Books books) throws SQLException;
 	public void editBook(Books books) throws SQLException;
 	public List<Books> getListBooks();

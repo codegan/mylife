@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="main.books")
-@NamedQuery(name="Books.findAll", query="SELECT DISTINCT b FROM Books b left join fetch b.booksReadEnd br") 
+@NamedQuery(name="Books.findAll", query="SELECT b FROM Books b") 
 public class Books implements Serializable{
 	@Id
 	@GeneratedValue 
@@ -37,9 +37,6 @@ public class Books implements Serializable{
 	@Column(name="year")
 	private int year;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "books", cascade=CascadeType.ALL)
-	List<BooksReadEnd> booksReadEnd;
 	
 	public Books() {
 	}
@@ -74,15 +71,6 @@ public class Books implements Serializable{
 	}
 	public void setAuthor(String author) {
 		this.author = author;
-	}
-	
-	
-	public List<BooksReadEnd> getBooksReadEnd() {
-		return booksReadEnd;
-	}
-
-	public void setBooksReadEnd(List<BooksReadEnd> booksReadEnd) {
-		this.booksReadEnd = booksReadEnd;
 	}
 
 	@Override
