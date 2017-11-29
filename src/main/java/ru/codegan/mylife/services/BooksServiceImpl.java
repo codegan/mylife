@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.model.Books;
@@ -12,6 +13,7 @@ import ru.codegan.mylife.model.BooksUsed;
 
 import javax.annotation.*;
 @Service
+@Transactional
 public class BooksServiceImpl implements BooksService{
 
 	BooksDao booksDao;
@@ -21,6 +23,7 @@ public class BooksServiceImpl implements BooksService{
 		this.booksDao = booksDao;
 	}
 	//Books
+	@Transactional(readOnly=true)
 	public List<Books> findAllBooks() {
 		return this.booksDao.findAllBooks();
 	}
@@ -33,10 +36,11 @@ public class BooksServiceImpl implements BooksService{
 		this.booksDao.removeBooks(books);
 	}
 	//Books_Used
+	@Transactional(readOnly=true)
 	public List<BooksUsed> findAllBooksUsed() {
 		return this.booksDao.findAllBooksUsed();
 	}
-
+	@Transactional(readOnly=true)
 	public List<BooksUsed> findAllStatusBooks(int status_id) {
 		return this.booksDao.findAllStatusBooks(status_id);
 	}

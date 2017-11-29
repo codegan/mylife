@@ -30,7 +30,7 @@ public class BooksUsed {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auto_id_books_used")
 	private Integer id;
 
-	private Integer page_number = 0;
+	private Integer page_number;
 	private Date date_start;
 	private Date date_end;
 	
