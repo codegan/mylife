@@ -5,10 +5,12 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -21,11 +23,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="main.books_used")
+@SequenceGenerator(name="auto_id_books_used", sequenceName="main.auto_id_books_used", allocationSize = 1, initialValue = 1)
 public class BooksUsed {
 	
 	@Id
-	@GeneratedValue
-	private int id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auto_id_books_used")
+	private Integer id;
 
 	private Integer page_number = 0;
 	private Date date_start;
@@ -42,10 +45,10 @@ public class BooksUsed {
 	private BooksUsedStatus usedStatus;
 	
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public Integer getPage_number() {

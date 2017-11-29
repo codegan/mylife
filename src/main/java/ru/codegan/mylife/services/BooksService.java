@@ -8,13 +8,13 @@ import ru.codegan.mylife.model.Books;
 import ru.codegan.mylife.model.BooksUsed;
 
 public interface BooksService {
+	//Books
 	public List<Books> findAllBooks();
 	public void saveBooks(Books books);
+	public void removeBooks(Books books);
+	//BooksUsed
 	public List<BooksUsed> findAllBooksUsed();
 	public List<BooksUsed> findAllStatusBooks(int status_id);
-	public void editBook(Books books) throws SQLException;
-	public List<Books> getListBooks();
-	public Books getBookById(int id) throws SQLException;
-	public void deleteBook(int id) throws SQLException;
-	
+	public void saveBooksUsed(BooksUsed books);
+	public void removeBooksUsed(BooksUsed booksUsed);
 }

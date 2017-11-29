@@ -18,6 +18,7 @@ import ru.codegan.mylife.dao.BooksDao;
 import ru.codegan.mylife.dao.BooksDaoImpl;
 import ru.codegan.mylife.model.Books;
 import ru.codegan.mylife.model.BooksUsed;
+import ru.codegan.mylife.model.BooksUsedStatus;
 import ru.codegan.mylife.services.BooksService;
 import org.apache.commons.dbcp.BasicDataSource;
 @RestController
@@ -30,27 +31,77 @@ public class BooksRestController {
 	public void setBooksService(BooksService booksService){
 		this.booksService = booksService;
 	}
-	
+	//Books
 	@RequestMapping(method = RequestMethod.GET, value="/books")
-	public @ResponseBody List<Books> getBooks() {
-		return this.booksService.findAllBooks();
-		
+	public @ResponseBody List<Books> findBooks() {
+		return this.booksService.findAllBooks();	
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/books/{name}/{year}/{author}")
-	public List<Books> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
+	public List<Books> addBooks(@PathVariable String name, @PathVariable int year, @PathVariable String author) {
 		Books books = new Books();
 		books.setName(name);
 		books.setYear(year);
 		books.setAuthor(author);
 		this.booksService.saveBooks(books);
-		return this.getBooks();
+		return this.findBooks();
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value="/books/{id}/{name}/{year}/{author}")
+	public List<Books> updateBooks(@PathVariable int id, @PathVariable String name, @PathVariable int year, @PathVariable String author) {
+		Books books = new Books();
+		books.setId(id);
+		books.setName(name);
+		books.setYear(year);
+		books.setAuthor(author);
+		this.booksService.saveBooks(books);
+		return this.findBooks();
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value="/books/{id}")
+	public List<Books> removeBooks(@PathVariable int id) {
+		Books books = new Books();
+		books.setId(id);
+		this.booksService.removeBooks(books);
+		return this.findBooks();
+	}
+	//Books_Used
 	@RequestMapping(method = RequestMethod.GET, value="/books_used")
-	public @ResponseBody List<BooksUsed> getUsedBooks() {
+	public @ResponseBody List<BooksUsed> findBooksUsed() {
 		return this.booksService.findAllBooksUsed();
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/books_used/{page_number}/{books_id}/{books_used_status_id}")
+	public List<BooksUsed> addBooksUsed(@PathVariable int page_number, @PathVariable int books_id, @PathVariable int books_used_status_id) {
+		Books books = new Books();
+		books.setId(books_id);
 		
+		BooksUsedStatus booksUsedStatus = new BooksUsedStatus();
+		booksUsedStatus.setId(books_used_status_id);
+		
+		BooksUsed booksUsed = new BooksUsed();
+		booksUsed.setPage_number(page_number);
+		booksUsed.setBooks(books);
+		booksUsed.setUsedStatus(booksUsedStatus);
+		this.booksService.saveBooksUsed(booksUsed);
+		return this.booksService.findAllBooksUsed();
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value="/books_used/{id}/{page_number}/{books_id}/{books_used_status_id}")
+	public List<BooksUsed> updateBooksUsed(@PathVariable int id, @PathVariable int page_number, @PathVariable int books_id, @PathVariable int books_used_status_id) {
+		Books books = new Books();
+		books.setId(books_id);
+		
+		BooksUsedStatus booksUsedStatus = new BooksUsedStatus();
+		booksUsedStatus.setId(books_used_status_id);
+		
+		BooksUsed booksUsed = new BooksUsed();
+		booksUsed.setId(id);
+		booksUsed.setPage_number(page_number);
+		booksUsed.setBooks(books);
+		booksUsed.setUsedStatus(booksUsedStatus);
+		this.booksService.saveBooksUsed(booksUsed);
+		return this.booksService.findAllBooksUsed();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/book_used_status/{id}")
@@ -58,39 +109,20 @@ public class BooksRestController {
 		return this.booksService.findAllStatusBooks(used_status_id);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/book/{id}")
-	public @ResponseBody Books getBookById(@PathVariable("id") int id) throws SQLException {
-		return this.booksService.getBookById(id);
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value="/book/delete/{id}")
-	public List<Books> deleteBook(@PathVariable int id) throws SQLException{
-		this.booksService.deleteBook(id);
-		return booksService.getListBooks();
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value="/book/edit/{id}/{name}/{year}/{author}")
-	public List<Books> updateBook(@PathVariable int id, @PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException{
+	@RequestMapping(method = RequestMethod.DELETE, value="/books_used/{id}/{page_number}/{books_id}/{books_used_status_id}")
+	public List<BooksUsed> removeBooksUsed(@PathVariable int id, @PathVariable int page_number, @PathVariable int books_id, @PathVariable int books_used_status_id) {
 		Books books = new Books();
-		books.setId(id);
-		books.setName(name);
-		books.setYear(year);
-		books.setAuthor(author);
-		this.booksService.editBook(books);
-		return this.booksService.getListBooks();
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value="/book/edit/{id}/{name}")
-	public List<Books> updateNameBook(@PathVariable int id, @PathVariable String name) throws SQLException{
-		Books books = new Books();
-		books.setId(id);
-		books.setName(name);
-		this.booksService.editBook(books);
-		return this.booksService.getListBooks();
-	}
-	
-	@RequestMapping(value="/book/**")
-	public String errorCode() {
-		return "Такоко адреса не сушествует";
+		books.setId(books_id);
+		
+		BooksUsedStatus booksUsedStatus = new BooksUsedStatus();
+		booksUsedStatus.setId(books_used_status_id);
+		
+		BooksUsed booksUsed = new BooksUsed();
+		booksUsed.setId(id);
+		booksUsed.setPage_number(page_number);
+		booksUsed.setBooks(books);
+		booksUsed.setUsedStatus(booksUsedStatus);
+		this.booksService.removeBooksUsed(booksUsed);
+		return this.booksService.findAllBooksUsed();
 	}
 }
