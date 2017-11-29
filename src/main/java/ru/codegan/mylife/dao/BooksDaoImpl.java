@@ -53,6 +53,20 @@ public class BooksDaoImpl implements BooksDao{
 		return books;
 	}
 	
+	public Books saveBooks(Books books) {
+		
+		books.setName("test book");
+		books.setAuthor("test author");
+		books.setYear(1993);
+		
+		if(books.getId() == null) {
+			em.persist(books);
+		}else {
+			em.merge(books);
+		}
+		return books;
+	}
+	
 	public List<BooksUsed> findAllBooksUsed(){
 		  List<BooksUsed> books_used = em.createQuery("SELECT b FROM BooksUsed b").getResultList();
 		return books_used;
@@ -63,17 +77,6 @@ public class BooksDaoImpl implements BooksDao{
 		return books_used.setParameter("status_id", status_id).getResultList();
 	}
 	
-	public void addBook(Books books) throws SQLException {
-		conn = dataSource.getConnection();
-		PreparedStatement ps = conn.prepareStatement("INSERT INTO main.books (name, year, author) values (?, ?, ?)");
-		ps.setString(1, books.getName());
-		ps.setInt(2, books.getYear());
-		ps.setString(3, books.getAuthor());
-		ps.execute();
-		ps.close();
-		conn.close();
-	}
-
 	public void editBook(Books books) throws SQLException {
 		conn = dataSource.getConnection();
 		PreparedStatement ps ;

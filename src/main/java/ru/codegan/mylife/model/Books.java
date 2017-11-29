@@ -9,10 +9,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,11 +24,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name="main.books")
 @NamedQuery(name="Books.findAll", query="SELECT b FROM Books b") 
+@SequenceGenerator(name="auto_id_books", sequenceName="main.auto_id_books", allocationSize = 1, initialValue = 1)
 public class Books implements Serializable{
+	
 	@Id
-	@GeneratedValue 
+	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "auto_id_books")
 	@Column(name="id")
-	private int id;
+	private Integer id;
 
 	@Column(name="name")
 	private String name;
@@ -48,10 +52,10 @@ public class Books implements Serializable{
 		this.author = author;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {

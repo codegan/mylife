@@ -20,24 +20,21 @@ public class BooksServiceImpl implements BooksService{
 	public void setBooksDao(BooksDao booksDao) {
 		this.booksDao = booksDao;
 	}
-	
+	//Get:books
 	public List<Books> findAllBooks() {
-		// TODO Auto-generated method stub
 		return this.booksDao.findAllBooks();
+	}
+	//Post:books
+	public void saveBooks(Books books) {
+		this.booksDao.saveBooks(books);
 	}
 
 	public List<BooksUsed> findAllBooksUsed() {
-		// TODO Auto-generated method stub
 		return this.booksDao.findAllBooksUsed();
 	}
 
 	public List<BooksUsed> findAllStatusBooks(int status_id) {
-		// TODO Auto-generated method stub
 		return this.booksDao.findAllStatusBooks(status_id);
-	}
-	
-	public void addBook(Books books) throws SQLException {
-		this.booksDao.addBook(books);
 	}
 
 	public void editBook(Books books) throws SQLException {

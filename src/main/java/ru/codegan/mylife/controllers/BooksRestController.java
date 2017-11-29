@@ -31,13 +31,23 @@ public class BooksRestController {
 		this.booksService = booksService;
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/book/all")
+	@RequestMapping(method = RequestMethod.GET, value="/books")
 	public @ResponseBody List<Books> getBooks() {
 		return this.booksService.findAllBooks();
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/book_used/all")
+	@RequestMapping(method = RequestMethod.POST, value="/books/{name}/{year}/{author}")
+	public List<Books> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
+		Books books = new Books();
+		books.setName(name);
+		books.setYear(year);
+		books.setAuthor(author);
+		this.booksService.saveBooks(books);
+		return this.getBooks();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/books_used")
 	public @ResponseBody List<BooksUsed> getUsedBooks() {
 		return this.booksService.findAllBooksUsed();
 		
@@ -51,18 +61,6 @@ public class BooksRestController {
 	@RequestMapping(method = RequestMethod.GET, value="/book/{id}")
 	public @ResponseBody Books getBookById(@PathVariable("id") int id) throws SQLException {
 		return this.booksService.getBookById(id);
-	}
-	
-	
-	
-	@RequestMapping(method = RequestMethod.POST, value="/book/add/{name}/{year}/{author}")
-	public List<Books> addBook(@PathVariable String name, @PathVariable int year, @PathVariable String author) throws SQLException {
-		Books books = new Books();
-		books.setName(name);
-		books.setYear(year);
-		books.setAuthor(author);
-		this.booksService.addBook(books);
-		return this.getBooks();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/book/delete/{id}")
