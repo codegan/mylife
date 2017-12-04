@@ -2,12 +2,14 @@ package ru.codegan.mylife.controllers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,8 @@ import ru.codegan.mylife.model.BooksUsed;
 import ru.codegan.mylife.model.BooksUsedStatus;
 import ru.codegan.mylife.services.BooksService;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 @RestController
 @RequestMapping("/api")
 public class BooksRestController {
@@ -37,12 +41,8 @@ public class BooksRestController {
 		return this.booksService.findAllBooks();	
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/books/{name}/{year}/{author}")
-	public List<Books> addBooks(@PathVariable String name, @PathVariable int year, @PathVariable String author) {
-		Books books = new Books();
-		books.setName(name);
-		books.setYear(year);
-		books.setAuthor(author);
+	@RequestMapping(method = RequestMethod.POST, value="/books")
+	public List<Books> addBooks(@RequestBody Books books) {
 		this.booksService.saveBooks(books);
 		return this.findBooks();
 	}
@@ -71,15 +71,18 @@ public class BooksRestController {
 		return this.booksService.findAllBooksUsed();
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/books_used/{page_number}/{books_id}/{books_used_status_id}")
-	public List<BooksUsed> addBooksUsed(@PathVariable int page_number, @PathVariable int books_id, @PathVariable int books_used_status_id) {
+	@RequestMapping(method = RequestMethod.POST, value="/books_used/{date_start}/{page_number}/{books_id}/{books_used_status_id}")
+	public List<BooksUsed> addBooksUsed(@PathVariable String date_start ,@PathVariable int page_number, @PathVariable int books_id, @PathVariable int books_used_status_id) {
 		Books books = new Books();
 		books.setId(books_id);
-		
+	
 		BooksUsedStatus booksUsedStatus = new BooksUsedStatus();
 		booksUsedStatus.setId(books_used_status_id);
+		DateTime dateTime = (DateTime) DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime(date_start);
 		
+		Date date = dateTime.toDate();
 		BooksUsed booksUsed = new BooksUsed();
+		booksUsed.setDate_start(date);
 		booksUsed.setPage_number(page_number);
 		booksUsed.setBooks(books);
 		booksUsed.setUsedStatus(booksUsedStatus);

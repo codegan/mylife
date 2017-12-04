@@ -1,5 +1,6 @@
 package ru.codegan.mylife.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,7 +13,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,6 +36,8 @@ public class BooksUsed {
 	private Integer id;
 
 	private Integer page_number;
+	
+	
 	private Date date_start;
 	private Date date_end;
 	
@@ -57,6 +64,7 @@ public class BooksUsed {
 	public void setPage_number(Integer page_number) {
 		this.page_number = page_number;
 	}
+	//SimpleDateFormat("MM-dd-yyyy").format(date_start);
 	public Date getDate_start() {
 		return date_start;
 	}
