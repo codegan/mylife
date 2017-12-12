@@ -17,6 +17,8 @@
 	<context:component-scan base-package="ru.codegan.mylife.controllers" />
 	<context:component-scan base-package="ru.codegan.mylife.dao" />
 	<context:component-scan base-package="ru.codegan.mylife.services" />
+	<context:component-scan base-package="ru.codegan.mylife.authentication" />
+	
 	<context:property-placeholder location="classpath:jdbc.properties"/>
 	<tx:annotation-driven/>
 	<tx:annotation-driven transaction-manager="transactionManager"/>
