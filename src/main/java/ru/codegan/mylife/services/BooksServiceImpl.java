@@ -28,6 +28,10 @@ public class BooksServiceImpl implements BooksService{
 		return this.booksDao.findAllBooks();
 	}
 
+	public Books findAllBooksById(int id) {
+		return this.booksDao.findAllBooksById(id);
+	}	
+	
 	public void saveBooks(Books books) {
 		this.booksDao.saveBooks(books);
 	}

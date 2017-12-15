@@ -9,6 +9,7 @@ import ru.codegan.mylife.model.BooksUsed;
 public interface BooksDao {
 	//Books
 	public List<Books> findAllBooks();
+	public Books findAllBooksById(int id);
 	public void saveBooks(Books books);
 	public void removeBooks(Books books);
 	//BooksUsed

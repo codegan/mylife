@@ -44,6 +44,11 @@ public class BooksDaoImpl implements BooksDao{
 		  List<Books> books = em.createQuery("SELECT b FROM Books b").getResultList();
 		return books;
 	}
+
+	public Books findAllBooksById(int id) {
+		TypedQuery<Books> books = (TypedQuery<Books>) em.createQuery("SELECT b FROM Books b WHERE b.id =:id");
+		return books.setParameter("id", id).getSingleResult();
+	}
 	
 	public void saveBooks(Books books) {
 		if(books.getId() == null) {
