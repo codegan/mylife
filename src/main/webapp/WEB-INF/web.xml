@@ -9,8 +9,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-			/WEB-INF/spring/dispatcher-servlet.xml,
-			/WEB-INF/spring/spring-security.xml
+			/WEB-INF/spring/dispatcher-servlet.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -21,19 +20,6 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
-	<listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
- 
-    <!-- Loads Spring Security configuration file -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            /WEB-INF/spring/dispatcher-servlet.xml,
-			/WEB-INF/spring/spring-security.xml
-        </param-value>
-    </context-param>
  
     <!-- Spring Security filter -->
     <filter>
