@@ -21,6 +21,7 @@ import ru.codegan.mylife.services.BooksService;
 @RestController
 @RequestMapping("/books")
 //@Secured(value = {"ROLE_ADMIN"})
+//@CrossOrigin(origins="http://localhost:4200")
 public class BooksController {
 	
 	private BooksService booksService;
